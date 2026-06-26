@@ -11,10 +11,18 @@ A true 4-variable bubble chart (stateless/OO matplotlib interface):
 Points are semi-transparent with NO outlines, since this dataset has many
 overlapping bubbles -- outlines would create visual clutter and make
 overlap regions look artificially darker/heavier than they are.
+
+Label collisions: with ~150 overlapping bubbles, simply placing a text
+label next to each highlighted country causes labels to overlap each
+other and get hidden behind nearby bubbles. We fix this with adjustText,
+which automatically repels labels away from each other and from the
+data points, then draws a thin leader line back to the true bubble
+location so the label is never ambiguous about which country it names.
 """
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from adjustText import adjust_text
 
 df = pd.read_csv("data/co2_countries_clean.csv")
 d = df[df["year"] == 2022].copy()
@@ -22,14 +30,14 @@ d["gdp_per_capita"] = d["gdp"] / d["population"]
 d = d.dropna(subset=["gdp_per_capita", "co2_per_capita", "population", "energy_per_capita"])
 d = d[(d["population"] > 1_000_000) & (d["gdp_per_capita"] > 0)]
 
-fig, ax = plt.subplots(figsize=(11, 7), dpi=200)
+fig, ax = plt.subplots(figsize=(12, 7.5), dpi=200)
 ax.set_facecolor("white")
 fig.patch.set_facecolor("white")
 
 sizes = (d["population"] / d["population"].max()) * 3000 + 20
 sc = ax.scatter(
     d["gdp_per_capita"], d["co2_per_capita"],
-    s=sizes, alpha=0.6,
+    s=sizes, alpha=0.55,
     c=d["energy_per_capita"], cmap="viridis",
     edgecolors="none",            # <- no outlines on points
 )
@@ -37,16 +45,34 @@ sc = ax.scatter(
 ax.set_xscale("log")
 ax.set_xlabel("GDP per capita (current US$, log scale)")
 ax.set_ylabel("CO\u2082 emissions per capita (tonnes)")
-ax.set_title("Wealth, Energy Use, and Emissions Are Tightly Linked \u2014 But Not Identical",
+ax.set_title("GDP per Capita vs. CO\u2082 Emissions per Capita (2022)",
              fontsize=15, fontweight="bold", loc="left", pad=15)
 
-# Label a handful of countries that anchor the story
+# Label a handful of countries that anchor the story.
+# Each gets a small black dot marking its TRUE location, since the text
+# label itself will be pushed away from that point by adjust_text below.
 highlight = ["United States", "China", "India", "Qatar", "Germany",
              "Norway", "Nigeria", "Brazil", "France", "Sweden"]
-for _, row in d[d["country"].isin(highlight)].iterrows():
-    ax.annotate(row["country"], (row["gdp_per_capita"], row["co2_per_capita"]),
-                fontsize=8.5, color="#333333",
-                xytext=(5, 4), textcoords="offset points")
+hl = d[d["country"].isin(highlight)]
+
+ax.scatter(hl["gdp_per_capita"], hl["co2_per_capita"],
+           s=18, color="#222222", zorder=5)
+
+texts = [
+    ax.text(row["gdp_per_capita"], row["co2_per_capita"], row["country"],
+             fontsize=9.5, color="#222222", fontweight="bold", zorder=6)
+    for _, row in hl.iterrows()
+]
+
+# Push labels apart from each other and away from bubbles/markers;
+# draw a thin gray leader line from each label back to its true point.
+adjust_text(
+    texts, ax=ax,
+    x=d["gdp_per_capita"].values, y=d["co2_per_capita"].values,  # repel from ALL bubbles, not just highlighted ones
+    expand=(1.4, 1.6),
+    force_text=(0.6, 0.8),
+    arrowprops=dict(arrowstyle="-", color="#888888", lw=0.8, shrinkA=2, shrinkB=2),
+)
 
 # Clean look: no top/right spines, no gridlines, white background
 for s in ["top", "right"]:
