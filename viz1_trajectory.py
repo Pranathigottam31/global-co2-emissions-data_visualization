@@ -45,6 +45,7 @@ for yr, label in events:
 
 ax.set_title("The Great Acceleration: Global CO\u2082 Emissions, 1850\u20132024",
              fontsize=15, fontweight="bold", pad=15, loc="left")
+
 ax.set_xlabel("Year")
 ax.set_ylabel("CO\u2082 emissions (million tonnes)")
 ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{x/1000:.0f}k"))

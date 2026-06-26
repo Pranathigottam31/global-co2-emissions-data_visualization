@@ -25,7 +25,9 @@ fig, ax = plt.subplots(figsize=(8, 6.5), dpi=200)
 sns.heatmap(corr, annot=True, fmt=".2f", cmap="RdBu_r", center=0,
             vmin=-1, vmax=1, square=True, linewidths=0.5,
             cbar_kws={"label": "Spearman correlation"}, ax=ax)
-ax.set_title("What Moves Together With Emissions? (2022, country-level)",
+# ax.set_title("What Moves Together With Emissions? (2022, country-level)",
+#               fontsize=13, fontweight="bold", pad=15)
+ax.set_title("Correlation Matrix of Emissions-Related Variables (2022)",
               fontsize=13, fontweight="bold", pad=15)
 ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
 ax.set_yticklabels(ax.get_yticklabels(), rotation=0)

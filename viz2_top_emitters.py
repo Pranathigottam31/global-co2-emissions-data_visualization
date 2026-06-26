@@ -32,7 +32,10 @@ axes[1].set_xlabel("Tonnes CO\u2082 per capita")
 for s in ["top", "right"]:
     axes[1].spines[s].set_visible(False)
 
-fig.suptitle("Two Different Rankings, Two Different Stories",
+# fig.suptitle("Two Different Rankings, Two Different Stories",
+#               fontsize=15, fontweight="bold", y=1.03)
+
+fig.suptitle("Top 10 Emitting Countries: Total CO\u2082 vs. CO\u2082 per Capita (2023)",
               fontsize=15, fontweight="bold", y=1.03)
 # fig.text(0.5, -0.02,
 #          "Source: Our World in Data \u2014 Global Carbon Project. Countries with population < 1M excluded.",

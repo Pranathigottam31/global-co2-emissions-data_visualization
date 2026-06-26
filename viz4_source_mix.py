@@ -19,7 +19,10 @@ colors = ["#2c2c2c", "#8b4513", "#4a90d9", "#a0a0a0"]
 
 ax.stackplot(w["year"], *[w[s] for s in sources], labels=labels, colors=colors, alpha=0.88)
 
-ax.set_title("What's Driving Global Emissions? The Fuel Mix, 1900\u20132023",
+# ax.set_title("What's Driving Global Emissions? The Fuel Mix, 1900\u20132023",
+#               fontsize=15, fontweight="bold", loc="left", pad=15)
+
+ax.set_title("Global CO\u2082 Emissions by Fuel Source, 1900\u20132023",
               fontsize=15, fontweight="bold", loc="left", pad=15)
 ax.set_xlabel("Year")
 ax.set_ylabel("CO\u2082 emissions (million tonnes)")

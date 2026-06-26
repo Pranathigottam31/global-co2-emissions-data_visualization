@@ -99,9 +99,9 @@ def run_script(script_name: str) -> bool:
 
 
 def main():
-    print("=" * 60)
+    # print("=" * 60)
     print("CO2 EMISSIONS DATA VISUALIZATION — PIPELINE START")
-    print("=" * 60)
+    # print("=" * 60)
 
     check_setup()
 
@@ -109,9 +109,9 @@ def main():
     for script in PIPELINE:
         results[script] = run_script(script)
 
-    print("\n" + "=" * 60)
+    # print("\n" + "=" * 60)
     print("SUMMARY")
-    print("=" * 60)
+    # print("=" * 60)
     for script, ok in results.items():
         status = "OK" if ok else "FAILED"
         print(f"  [{status}] {script}")
