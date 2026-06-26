@@ -118,7 +118,4 @@ fully self-contained and just needs `data/` to exist alongside it.
   (`alpha=0.6`, `edgecolors="none"`) so overlapping bubbles stay readable
   instead of stacking into a solid dark mass.
 
-## Source attribution
 
-Every chart includes a small italic caption crediting **Our World in
-Data — Global Carbon Project** as the data source.
